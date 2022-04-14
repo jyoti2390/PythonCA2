@@ -1,0 +1,112 @@
+<div class="container mt-4">
+  <div class="d-flex justify-content-around">
+    <h1 class="mt-2" id="green">Funds</h1>
+
+  <!-- <div>
+      <button class="btn btn-secondary dropdown-toggle mt-3" type="button" id="dropdownMenuButton" data-toggle="dropdown"
+          aria-haspopup="true" aria-expanded="false" style="background-color: darkslategrey; margin-left: 180px;">
+          Sort by
+        </button>
+        <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+          <a class="dropdown-item" (click)="fundsAll()">All</a>
+          <a class="dropdown-item" (click)="findByFhTotal(20)">name</a>
+        </div>
+    </div> -->
+</div>
+<hr />
+<div>
+  <div class="d-flex justify-content-around">
+
+    <div class="dropdown">
+      <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown"
+        aria-haspopup="true" aria-expanded="false" style="background-color: darkslategrey">
+        AMC
+      </button>
+      <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+        <li><a class="dropdown-item" (click)="fundsAll()">All</a></li>
+        <li *ngFor="let fundamc of fundService.fundsAmc"><a class="dropdown-item"
+            (click)="findByAmc(fundamc)">{{fundamc}}</a></li>
+      </div>
+    </div>
+
+    <div class="dropdown">
+      <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown"
+        aria-haspopup="true" aria-expanded="false" style="background-color: darkslategrey">
+        Risks
+      </button>
+      <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+        <li><a class="dropdown-item" (click)="fundsAll()">All</a></li>
+        <li *ngFor="let fundrisk of fundService.fundsRisk"><a class="dropdown-item"
+            (click)="findByRisk(fundrisk)">{{fundrisk}}</a></li>
+      </div>
+    </div>
+
+    <div class="dropdown">
+      <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown"
+        aria-haspopup="true" aria-expanded="false" style="background-color: darkslategrey">
+        Return
+      </button>
+      <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+        <a class="dropdown-item" (click)="fundsAll()">All</a>
+        <a class="dropdown-item" (click)="findByFhTotal(20)">upto 20%</a>
+        <a class="dropdown-item" (click)="findByFhTotal(30)">upto 30%</a>
+        <a class="dropdown-item" (click)="findByFhTotal(40)">upto 40%</a>
+      </div>
+
+    </div>
+
+    <div class="dropdown">
+      <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown"
+        aria-haspopup="true" aria-expanded="false" style="background-color: darkslategrey">
+        AUM
+      </button>
+      <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+        <a class="dropdown-item" (click)="fundsAll()">All</a>
+        <a class="dropdown-item" (click)="findByAum(10)">upto 10 Cr</a>
+        <a class="dropdown-item" (click)="findByAum(20)">upto 20 Cr</a>
+        <a class="dropdown-item" (click)="findByAum(30)">upto 30 Cr</a>
+      </div>
+    </div>
+
+    <div class="dropdown">
+      <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown"
+        aria-haspopup="true" aria-expanded="false" style="background-color: darkslategrey">
+        Sort by
+      </button>
+      <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+        <a class="dropdown-item" (click)="orderByFundName()">Name</a>
+        <a class="dropdown-item" (click)="orderByFundAum()">AUM</a>
+      </div>
+    </div>
+
+  </div>
+</div>
+<br>
+
+<!-- <div class="d-flex justify-content-around "> -->
+<div class="container">
+  <div class="row" style="margin-left: 25px;">
+    <div class="card mb-4 pointer" *ngFor="let fund of fundService.funds" routerLink="/details"
+      (click)="findById(fund.fundId)" style="width: 18rem; margin-right:50px ;">
+      <img [src]="fund.imgSrc" class="card-img-top" alt="...">
+      <div class="card-body">
+        <h5 class="card-title">{{fund.fundName}}</h5>
+        <p class="card-text">{{fund.fundDesc}}</p>
+      </div>
+      <ul class="list-group list-group-flush">
+        <li class="list-group-item"><span class="text-muted">AUM :</span> {{fund.fundAum}} Cr</li>
+        <li class="list-group-item"><span class="text-muted">Risks :</span> {{fund.fundRisk}}</li>
+        <li class="list-group-item"><span class="text-muted">Type :</span> {{fund.fundType}}</li>
+      </ul>
+      <div class="card-body">
+        <!-- <a  class="card-link">Details</a> -->
+        <!-- <a  href="#" class="card-link">Buy</a> -->
+        <button class="btn" style="color: white; background-color: darkslategrey; float: right"
+          (click)="findById(fund.fundId)" routerLink="/buy">Buy</button>
+      </div>
+    </div>
+  </div>
+</div>
+</div>
+
+<app-footer></app-footer>

@@ -1,0 +1,40 @@
+<div class="mt-5">
+  <div class="container">
+    <div class="shadow card mb-3" *ngFor="let fund of fundService.fundDetails">
+      <img [src]="fund[8]" class="card-img-top" alt="..." style="width: 300px;">
+      <div class="card-body">
+        <div class="card-title">
+        <h4 >{{fund[0]}}</h4>
+        <button class="btn" style="color: white; background-color: darkslategrey; float: right"
+          (click)="findById(fund.fundId)" routerLink="/buy">Buy</button>
+        </div>
+        <br>
+        <hr>
+        <p class="card-text"><span class="text-muted">Desc :</span> {{fund[7]}}</p>
+        <p class="card-text"><span class="text-muted">Mgr  :</span> {{fund[6]}}</p>
+        <p class="card-text"><span class="text-muted">Type :</span> {{fund[4]}}</p>
+        <p class="card-text"><span class="text-muted">Risk :</span> {{fund[2]}}</p>
+        <p class="card-text"><span class="text-muted">AUM  :</span> {{fund[3]}}</p>
+        <p class="card-text"><span class="text-muted">NAV  :</span> {{fund[5]}}</p>
+        <table class="table">
+            <tr>
+              <th class="text-muted" scope="col">Return</th>
+              <th class="text-muted" scope="col">1 Month</th>
+              <th class="text-muted" scope="col">1 Year</th>
+              <th class="text-muted" scope="col">Total</th>
+            </tr>
+          <tbody>
+            <tr>
+              <td></td>
+              <td>{{fund[9]}} %</td>
+              <td>{{fund[10]}} %</td>
+              <td>{{fund[11]}} %</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</div>
+
+<app-footer></app-footer>

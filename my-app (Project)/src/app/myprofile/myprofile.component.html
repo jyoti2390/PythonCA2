@@ -1,0 +1,76 @@
+<div class=" container shadow emp-profile animate__animated animate__fadeInUp myprofilemar">
+  <form method="post">
+    <div class="row">
+      <div class="col-md-4">
+        <div class="profile-img">
+          <img [src]="auth.currentUser.imgSrc" *ngIf="auth.currentUser.imgSrc"  alt=".." />
+          <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQWo3luud5KPZknLR5zdUUwzvYBztWgTxrkbA&usqp=CAU" *ngIf="!auth.currentUser.imgSrc"  alt=".." />
+        </div>
+      </div>
+      <div style="margin-top: 100px;">
+        <h3>{{auth.currentUser.userName}}</h3>
+      </div>
+    </div>
+    <div class="col-md-6">
+      <div class="profile-head">
+        <ul class="nav nav-tabs" id="myTab" role="tablist">
+          <li class="nav-item">
+            <a class="nav-link active" id="home-tab" data-toggle="tab" href="#home" role="tab" aria-controls="home"
+              aria-selected="true">About</a>
+          </li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="col-md-8">
+      <div class="tab-content profile-tab" id="myTabContent">
+        <div class="tab-pane fade show active" id="home" role="tabpanel" aria-labelledby="home-tab"
+          style="margin-left: 50px;">
+          <div class="row">
+            <div class="col-md-6">
+              <label>User Id</label>
+            </div>
+            <div class="col-md-6">
+              <p>{{auth.currentUser.userId}}</p>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-md-6">
+              <label>Name</label>
+            </div>
+            <div class="col-md-6">
+              <p>{{auth.currentUser.userName}}</p>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-md-6">
+              <label>Email</label>
+            </div>
+            <div class="col-md-6">
+              <p>{{auth.currentUser.userEmail}}</p>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-md-6">
+              <label>Phone</label>
+            </div>
+            <div class="col-md-6">
+              <p>{{auth.currentUser.userPhoneNumber}}</p>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-md-6">
+              <label>Age</label>
+            </div>
+            <div class="col-md-6">
+              <p>{{auth.currentUser.userAge}}</p>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </form>
+</div>
+
+<app-footer></app-footer>

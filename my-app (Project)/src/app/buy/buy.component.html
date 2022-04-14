@@ -1,0 +1,62 @@
+<div class="container" style="margin-top: 140px;">
+
+  <div class="shadow d-flex position-relative" *ngFor="let fund of fundService.fundDetails">
+    <img [src]="fund[8]" class="flex-shrink-0 me-3" alt="..." style="width:300px">
+    <div style="margin-left: 10px;">
+      <h5 class="mt-3">{{fund[0]}}</h5>
+      <i class="text-muted">by {{fund[1]}}</i>
+      <ul style="color: rgb(85, 84, 84);">
+        <li>
+          Bank payment, Finance + Loan Company
+        </li>
+        <li>
+          Loan & Financial investment, Loans & funding
+        </li>
+        <li>
+          Payday Loans and Cash Advance
+        </li>
+      </ul>
+      <table class="table">
+        <tr>
+          <th class="text-muted" scope="col">Return</th>
+          <th class="text-muted" scope="col">1 Month</th>
+          <th class="text-muted" scope="col">1 Year</th>
+          <th class="text-muted" scope="col">Total</th>
+        </tr>
+        <tbody>
+          <tr>
+            <td></td>
+            <td>{{fund[9]}} %</td>
+            <td>{{fund[10]}} %</td>
+            <td>{{fund[11]}} %</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div style="margin-left: 50px; margin-top: 20px; margin-bottom: 20px;">
+      <div class="vr"></div>
+    </div>
+    <div style="margin-left: 100px;">
+      <form (ngSubmit)="addUserFund(isValue)" #isValue=ngForm *ngIf="!successFlag">
+        <div class="form-group" style="margin-top: 90px;">
+          <input type="number" class="form-control" placeholder="Enter Amount" name="ufAmount"
+            [(ngModel)]="userFund.ufAmount" ngDefaultControl #ufAmount="ngModel" required>
+        </div>
+        <p class="text-muted" style="text-align: center;">{{date}}</p>
+        <p class="text-muted" style="text-align: center; margin-top: -10px;">Last Updated: 20 Mar 2021</p>
+        <button type="submit" class="btn" [disabled] = "isValue.pristine || isValue.invalid "
+          style="color: white; background-color: darkslategrey; margin-left: 60px; align-content: center;">Confirm</button>
+      </form>
+      <div class="alert alert-success d-flex align-items-center" role="alert" *ngIf="successFlag"
+        style="margin-top: 90px; margin-left: -60px;">
+        <div class="ms-2"><i class="material-icons" style="margin-left: 40px;">check_circle</i>
+          Congratulations
+          <p>Click <a routerLink="/myinvestment">here </a>to go to My Investments</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<div style="margin-top: 140px;"></div>
+<app-footer></app-footer>
