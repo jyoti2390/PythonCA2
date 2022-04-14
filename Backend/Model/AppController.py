@@ -7,6 +7,8 @@ from flask_mysqldb import MySQL
 import json
 from json import loads
 from flask import request
+from flask_httpauth import HTTPBasicAuth
+
 
 app = Flask(__name__)
 cors = CORS(app, resources={r"/*": {"origins": "*"}})
@@ -17,6 +19,16 @@ app.config['MYSQL_PASSWORD'] = ''
 app.config['MYSQL_DB'] = 'wealthmanagement'
 
 mysql = MySQL(app)
+secure = HTTPBasicAuth()
+
+@secure.verify_password
+def authenticate(username, password):
+    if username and password:
+        if username == 'user' and password == 'admin':
+            return True
+    else:
+      return False
+    return False
 
 @app.route('/funds/all')
 def ViewFunds():
@@ -52,6 +64,7 @@ def FundAmc():
         return jsonify(Result)
 
 @app.route('/fundsOrder')
+@secure.login_required
 def fundsOrder():
     cur =mysql.connection.cursor()
     cur.execute("SELECT * FROM funds order by fund_name;")
