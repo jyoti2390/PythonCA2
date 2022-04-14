@@ -71,15 +71,14 @@ def fundsOrder():
       Result['imgSrc']=entry[9]
       Results.append(Result)
     response=Results
-    response=json.dumps(response)
-    #ret=app.response_class(
-    #  response=json.dumps(response),
-    #  status=200,
-    #  mimetype='application/json'
-    #)
-    #values = response.values()
-    #values_list = list(values)
-    return response
+    resreturn=app.response_class(
+    response=json.dumps(response),
+    status=200,
+    mimetype='application/json'
+    )
+
+    return resreturn
+
 
 
 if __name__ == "__main__":
