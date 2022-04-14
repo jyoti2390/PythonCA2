@@ -115,7 +115,7 @@ def fundsOrderByAum():
     cur.execute("SELECT * FROM funds order by fund_aum;")
     rv = cur.fetchall() 
     Results=[]
-    for entry in rv: #Format the Output Results and add to return string
+    for entry in rv: 
       Result={}
       Result['fundId']=entry[0]
       Result['fundName']=entry[1]
@@ -139,7 +139,36 @@ def fundsOrderByAum():
 
 
 
+@app.route('/funds/<fundname>')
+def fundsbyinput(fundname):
+    cur =mysql.connection.cursor()
+    cur.execute("SELECT * FROM funds where fund_amc=%s",[fundname])
+    rv = cur.fetchall() 
+    Results=[]
+    for entry in rv:      
+      Result={}
+      Result['fundId']=entry[0]
+      Result['fundName']=entry[1]
+      Result['fundAmc']=entry[2]
+      Result['fundRisk']=entry[3]
+      Result['fundType']=entry[4]
+      Result['fundAum']=entry[5]
+      Result['fundNav']=entry[6]
+      Result['fundMgr']=entry[7]
+      Result['fundDesc']=entry[8]
+      Result['imgSrc']=entry[9]
+      Results.append(Result)
+    response=Results
+    resreturn=app.response_class(
+    response=json.dumps(response),
+    status=200,
+    mimetype='application/json'
+    )
+
+    return resreturn
+
+
 if __name__ == "__main__":
-    app.run(host='0.0.0.0', port='8080') # indent this line
+    app.run(host='0.0.0.0', port='8080') 
 
 
