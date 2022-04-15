@@ -51,7 +51,7 @@ def ViewFunds():
             cur['imgSrc']=Result[i][9]
             res.append(cur)
         return jsonify(res)
-    return "vikas"
+    return "jyoti"
 
 
 @app.route('/fundAmc')
