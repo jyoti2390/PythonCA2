@@ -2,6 +2,10 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Fund } from '../model/fund';
 
+
+
+
+
 @Injectable({
   providedIn: 'root'
 })
@@ -66,7 +70,7 @@ export class FundService {
       
     });
   }
-
+ 
   orderbyFundName(){
     this.http.get<Fund[]>('http://localhost:5000/fundsOrder').subscribe((res)=>{
       this.funds = res;

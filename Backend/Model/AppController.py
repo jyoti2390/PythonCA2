@@ -191,6 +191,7 @@ def fundsbysearch(fundname):
     mimetype='application/json'
     )
 
+    return resreturn
 
 
 @app.route('/user/add', methods=['POST'])
@@ -232,6 +233,30 @@ def newusr():
     else:
         return 'Request not valid!'
 
+@app.route('/signin', methods=['POST'])
+# @secure.login_required
+def signIn():
+    cur =mysql.connection.cursor()
+    content_type = request.headers.get('Content-Type')
+    if (content_type == 'application/json'):
+        json = request.json
+        usrEmail = json["userEmail"]
+        usrPassword = json["userPassword"]
+        cur.execute("""SELECT * FROM users WHERE user_email=%s and user_password=%s""", (usrEmail, usrPassword))
+        rv = cur.fetchall()
+        for entry in rv:
+            Result={}
+            Result['userId']=entry[0]
+            Result['userName']=entry[4]
+            Result['userEmail']=entry[3]
+            Result['userPassword']=entry[5]
+            Result['userPhoneNumber']=entry[6]
+            Result['userAge']=entry[2]
+            Result['imgSrc']=entry[1]
+            response=Result
+        return jsonify(response)
+    else:
+        return 'Request not valid!'
 
 
 if __name__ == "__main__":
