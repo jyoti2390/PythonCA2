@@ -252,6 +252,47 @@ def fundsbysearch(fundname):
     )
 
 
+@app.route('/user/add', methods=['POST'])
+def newusr():
+    cur =mysql.connection.cursor()
+    content_type = request.headers.get('Content-Type')
+    if (content_type == 'application/json'):
+        json = request.json
+        usrEmail = json["userEmail"]
+        usrPassword = json["userPassword"]
+        usrName = json["userName"]
+        usrPhoneNumber = json["userPhoneNumber"]
+        usrAge = json["userAge"]
+        imgsrc = json["imgSrc"]
+        cur.execute(
+    """INSERT INTO
+        users (
+            img_src,
+            user_age,
+            user_email,
+            user_name,
+            user_password,
+            user_phone_number)
+    VALUES (%s,%s,%s,%s,%s,%s)""", (imgsrc, usrAge, usrEmail, usrName, usrPassword, usrPhoneNumber))
+        mysql.connection.commit()
+        cur.execute("""SELECT * FROM users WHERE user_email=%s and user_password=%s""", (usrEmail, usrPassword))
+        rv = cur.fetchall()
+        for entry in rv:
+            Result={}
+            Result['userId']=entry[0]
+            Result['userName']=entry[4]
+            Result['userEmail']=entry[3]
+            Result['userPassword']=entry[5]
+            Result['userPhoneNumber']=entry[6]
+            Result['userAge']=entry[2]
+            Result['imgSrc']=entry[1]
+            response=Result
+        return jsonify(response)
+    else:
+        return 'Request not valid!'
+
+
+
 if __name__ == "__main__":
     app.run(host='0.0.0.0', port='8080') 
 
