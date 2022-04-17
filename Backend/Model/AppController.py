@@ -260,7 +260,6 @@ def signIn():
       #Get all match from history and funds table
      @app.route('/funds/join', methods=['GET'])
         def fundsalljoin():
-          print("hello amber hgjhjkjkkkklkl")
           cur =mysql.connection.cursor()
           cur.execute("SELECT fund_name, fund_amc, fund_risk, fund_aum, fund_type, fund_nav, fund_mgr, fund_desc, img_src,fh1month, fh1year, fh_total FROM funds f ,fund_history h where f.fund_id = h.fund_id")
           rv = cur.fetchall()
