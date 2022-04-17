@@ -51,7 +51,7 @@ def ViewFunds():
             cur['imgSrc']=Result[i][9]
             res.append(cur)
         return jsonify(res)
-    return "vikas"
+    return "jyoti"
 
 
 @app.route('/fundAmc')
@@ -191,65 +191,72 @@ def fundsbysearch(fundname):
     mimetype='application/json'
     )
 
-
-if __name__ == "__main__":
-    app.run(host='0.0.0.0', port='8080') 
-
-
-
-@app.route('/funds/<fundname>')
-def fundsbyinput(fundname):
-    cur =mysql.connection.cursor()
-    cur.execute("SELECT * FROM funds where fund_amc=%s",[fundname])
-    rv = cur.fetchall() 
-    Results=[]
-    for entry in rv:      
-      Result={}
-      Result['fundId']=entry[0]
-      Result['fundName']=entry[1]
-      Result['fundAmc']=entry[2]
-      Result['fundRisk']=entry[3]
-      Result['fundType']=entry[4]
-      Result['fundAum']=entry[5]
-      Result['fundNav']=entry[6]
-      Result['fundMgr']=entry[7]
-      Result['fundDesc']=entry[8]
-      Result['imgSrc']=entry[9]
-      Results.append(Result)
-    response=Results
-    resreturn=app.response_class(
-    response=json.dumps(response),
-    status=200,
-    mimetype='application/json'
-    )
-
     return resreturn
 
-@app.route('/search/<fundname>')
-def fundsbysearch(fundname):
+
+@app.route('/user/add', methods=['POST'])
+def newusr():
     cur =mysql.connection.cursor()
-    cur.execute("SELECT * FROM funds where fund_amc like '%%%s%%'" %(fundname))
-    rv = cur.fetchall() 
-    Results=[]
-    for entry in rv: 
-      Result={}
-      Result['fundId']=entry[0]
-      Result['fundName']=entry[1]
-      Result['fundAmc']=entry[2]
-      Result['fundRisk']=entry[3]
-      Result['fundType']=entry[4]
-      Result['fundAum']=entry[5]
-      Result['fundNav']=entry[6]
-      Result['fundMgr']=entry[7]
-      Result['fundDesc']=entry[8]
-      Result['imgSrc']=entry[9]
-      Results.append(Result)
-    response=Results
-    resreturn=app.response_class(
-    response=json.dumps(response),
-    status=200,
-    mimetype='application/json'
-    )
+    content_type = request.headers.get('Content-Type')
+    if (content_type == 'application/json'):
+        json = request.json
+        usrEmail = json["userEmail"]
+        usrPassword = json["userPassword"]
+        usrName = json["userName"]
+        usrPhoneNumber = json["userPhoneNumber"]
+        usrAge = json["userAge"]
+        imgsrc = json["imgSrc"]
+        cur.execute(
+    """INSERT INTO
+        users (
+            img_src,
+            user_age,
+            user_email,
+            user_name,
+            user_password,
+            user_phone_number)
+    VALUES (%s,%s,%s,%s,%s,%s)""", (imgsrc, usrAge, usrEmail, usrName, usrPassword, usrPhoneNumber))
+        mysql.connection.commit()
+        cur.execute("""SELECT * FROM users WHERE user_email=%s and user_password=%s""", (usrEmail, usrPassword))
+        rv = cur.fetchall()
+        for entry in rv:
+            Result={}
+            Result['userId']=entry[0]
+            Result['userName']=entry[4]
+            Result['userEmail']=entry[3]
+            Result['userPassword']=entry[5]
+            Result['userPhoneNumber']=entry[6]
+            Result['userAge']=entry[2]
+            Result['imgSrc']=entry[1]
+            response=Result
+        return jsonify(response)
+    else:
+        return 'Request not valid!'
+
+@app.route('/signin', methods=['POST'])
+# @secure.login_required
+def signIn():
+    cur =mysql.connection.cursor()
+    content_type = request.headers.get('Content-Type')
+    if (content_type == 'application/json'):
+        json = request.json
+        usrEmail = json["userEmail"]
+        usrPassword = json["userPassword"]
+        cur.execute("""SELECT * FROM users WHERE user_email=%s and user_password=%s""", (usrEmail, usrPassword))
+        rv = cur.fetchall()
+        for entry in rv:
+            Result={}
+            Result['userId']=entry[0]
+            Result['userName']=entry[4]
+            Result['userEmail']=entry[3]
+            Result['userPassword']=entry[5]
+            Result['userPhoneNumber']=entry[6]
+            Result['userAge']=entry[2]
+            Result['imgSrc']=entry[1]
+            response=Result
+        return jsonify(response)
+    else:
+        return 'Request not valid!'
 
 
 if __name__ == "__main__":
