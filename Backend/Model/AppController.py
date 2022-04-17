@@ -7,7 +7,7 @@ from flask_mysqldb import MySQL
 import json
 from json import loads
 from flask import request
-
+from flask_httpauth import HTTPBasicAuth
 
 app = Flask(__name__)
 cors = CORS(app, resources={r"/*": {"origins": "*"}})
@@ -51,7 +51,6 @@ def ViewFunds():
             cur['imgSrc']=Result[i][9]
             res.append(cur)
         return jsonify(res)
-    return "jyoti"
 
 
 @app.route('/fundAmc')
@@ -257,48 +256,78 @@ def signIn():
         return jsonify(response)
     else:
         return 'Request not valid!'
-      #Get all match from history and funds table
-     @app.route('/funds/join', methods=['GET'])
-        def fundsalljoin():
-          cur =mysql.connection.cursor()
-          cur.execute("SELECT fund_name, fund_amc, fund_risk, fund_aum, fund_type, fund_nav, fund_mgr, fund_desc, img_src,fh1month, fh1year, fh_total FROM funds f ,fund_history h where f.fund_id = h.fund_id")
-          rv = cur.fetchall()
-          Results=[]
-          for entry in rv: 
-              Result={}
-              if entry=='fund_name':
-                Result['fundName']=rv[entry]
-              elif entry=='fund_amc':
-                Result['fundAmc']=rv[entry]
-              elif entry=='fund_risk':
-                Result['fundRisk']=rv[entry]
-              elif entry=='fund_aum':
-                Result['fundAum']=rv[entry]
-              elif entry=='fund_type':
-                Result['fundType']=rv[entry]
-              elif entry=='fund_nav':
-                Result['fundNav']=rv[entry]
-              elif entry=='fund_mgr':
-                Result['fundMgr']=rv[entry]
-              elif entry=='fund_desc':
-                Result['fundDesc']=rv[entry]
-              elif entry=='img_src':
-                Result['imgSrc']=rv[entry]
-              elif entry=='fh1month':
-                Result['fh1month']=rv[entry]
-              elif entry=='fh1year':
-                Result['fh1year']=rv[entry]
-              elif entry=='fh_total':
-                Result['fhTotal']=rv[entry]
-                Results.append(Result)
-        response=Results
-        resreturn=app.response_class(
-        response=json.dumps(response),
-        status=200,
-        mimetype='application/json'
-    )
 
+@app.route('/userfund/add', methods=['POST'])
+def userFundAdd():
+    cur =mysql.connection.cursor()
+    content_type = request.headers.get('Content-Type')
+    if (content_type == 'application/json'):
+        json = request.json
+        userid = json["userId"]
+        ufid = json["ufId"]
+        fndid = json["fundId"]
+        uftype = json["ufType"]
+        ufdate = json["ufDate"]
+        ufamount = json["ufAmount"]
+        fundname = json["fundName"]
+        #fundamc = json["fundAmc"]
+        #totalfund = json["totalFund"]
+        cur.execute(
+    """INSERT INTO
+        user_fund (fund_id,
+            uf_amount,
+            uf_date,
+            uf_type,
+            user_id)
+    VALUES (%s,%s,%s,%s,%s)""", (fndid,ufamount, ufdate, uftype, userid))
+        mysql.connection.commit()
+        return jsonify(json)
+    else:
+        return 'Request not valid!'
+
+
+
+#Get all match from history and funds table
+@app.route('/funds/join', methods=['GET'])
+def fundsalljoin():
+    cur =mysql.connection.cursor()
+    cur.execute("SELECT fund_name, fund_amc, fund_risk, fund_aum, fund_type, fund_nav, fund_mgr, fund_desc, img_src,fh1month, fh1year, fh_total FROM funds f ,fund_history h where f.fund_id = h.fund_id")
+    rv = cur.fetchall()
+    Results=[]
+    for entry in rv: 
+        Result={}
+        if entry=='fund_name':
+        Result['fundName']=rv[entry]
+        elif entry=='fund_amc':
+        Result['fundAmc']=rv[entry]
+        elif entry=='fund_risk':
+        Result['fundRisk']=rv[entry]
+        elif entry=='fund_aum':
+        Result['fundAum']=rv[entry]
+        elif entry=='fund_type':
+        Result['fundType']=rv[entry]
+        elif entry=='fund_nav':
+        Result['fundNav']=rv[entry]
+        elif entry=='fund_mgr':
+        Result['fundMgr']=rv[entry]
+        elif entry=='fund_desc':
+        Result['fundDesc']=rv[entry]
+        elif entry=='img_src':
+        Result['imgSrc']=rv[entry]
+        elif entry=='fh1month':
+        Result['fh1month']=rv[entry]
+        elif entry=='fh1year':
+        Result['fh1year']=rv[entry]
+        elif entry=='fh_total':
+        Result['fhTotal']=rv[entry]
+        Results.append(Result)
+response=Results
+resreturn=app.response_class(
+response=json.dumps(response),
+status=200,
+mimetype='application/json'
+)
 
 if __name__ == "__main__":
-    app.run(debug=True) 
+    app.run(host='0.0.0.0', port='8080')
 
