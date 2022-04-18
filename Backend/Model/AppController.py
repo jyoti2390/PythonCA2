@@ -220,6 +220,7 @@ def FundsByFundId(id):
 
 
 @app.route('/user/add', methods=['POST'])
+@secure.login_required
 def newusr():
     cur =mysql.connection.cursor()
     content_type = request.headers.get('Content-Type')
@@ -259,7 +260,7 @@ def newusr():
         return 'Request not valid!'
 
 @app.route('/signin', methods=['POST'])
-# @secure.login_required
+@secure.login_required
 def signIn():
     cur =mysql.connection.cursor()
     content_type = request.headers.get('Content-Type')
@@ -284,6 +285,7 @@ def signIn():
         return 'Request not valid!'
 
 @app.route('/userfund/add', methods=['POST'])
+@secure.login_required
 def userFundAdd():
     cur =mysql.connection.cursor()
     content_type = request.headers.get('Content-Type')
@@ -371,6 +373,7 @@ def FundTotal(id):
     return rv
 
 @app.route('/funddelete', methods=['DELETE'])
+@secure.login_required
 def funddelete():
     cur =mysql.connection.cursor()
     content_type = request.headers.get('Content-Type')
