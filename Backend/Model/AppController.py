@@ -216,6 +216,39 @@ def FundsByFundId(id):
     rv = cur.fetchall()
     rv=jsonify(rv)
     return rv
+@app.route('/fundsRisk/Priority/<fundrisk>')
+def fundsRiskPriority(fundrisk):
+  cur =mysql.connection.cursor()
+  cur.execute("SELECT * from funds where fund_risk=%s",[fundrisk])
+  rv = cur.fetchall()
+  for entry in rv:      
+    Result={}
+    Result['fundId']=entry[0]
+    Result['fundName']=entry[1]
+    Result['fundAmc']=entry[2]
+    Result['fundRisk']=entry[3]
+    Result['fundType']=entry[4]
+    Result['fundAum']=entry[5]
+    Result['fundNav']=entry[6]
+    Result['fundMgr']=entry[7]
+    Result['fundDesc']=entry[8]
+    Result['imgSrc']=entry[9]
+  response=Result
+  return jsonify(response)
+
+@app.route('/fundsAum/<fundAum>')
+def fundsAum(fundAum):
+  cur =mysql.connection.cursor()
+  cur.execute("SELECT * from funds where fund_aum<%s",[fundAum])
+  rv = cur.fetchall()
+  return jsonify(rv)
+
+@app.route('/fundsReturn/<fundAum>')
+def fundsAum(fundAum):
+  cur =mysql.connection.cursor()
+  cur.execute("SELECT * from funds where fund_aum<%s",[fundAum])
+  rv = cur.fetchall()
+  return jsonify(rv)
 
 
 
