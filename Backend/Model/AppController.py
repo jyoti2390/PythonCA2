@@ -328,6 +328,22 @@ status=200,
 mimetype='application/json'
 )
 
+@app.route('/fundsHistoryById/<id>')
+def FundHistoryById(id):
+    cur =mysql.connection.cursor()
+    cur.execute("SELECT fund_name, fund_amc, uf_type, uf_amount, uf_date FROM funds f join user_fund u on f.fund_id = u.fund_id WHERE user_id=%s;",[int(id)])
+    rv = cur.fetchall()
+    rv=jsonify(rv)
+    return rv
+
+@app.route('/fundtotal/<id>')
+def FundTotal(id):
+    cur =mysql.connection.cursor()
+    cur.execute("SELECT sum(uf_amount) FROM funds f join user_fund u on f.fund_id = u.fund_id WHERE user_id=%s;",[int(id)])
+    rv = cur.fetchall()
+    rv=jsonify(rv)
+    return rv
+
 if __name__ == "__main__":
     app.run(host='0.0.0.0', port='8080')
 
