@@ -244,10 +244,10 @@ def fundsAum(fundAum):
   rv = cur.fetchall()
   return jsonify(rv)
 
-@app.route('/fundsReturn/<fundAum>')
-def fundsAum(fundAum):
+@app.route('/fundsReturn/<fundnav>')
+def fundsNav(fundnav):
   cur =mysql.connection.cursor()
-  cur.execute("SELECT * from funds where fund_aum<%s",[fundAum])
+  cur.execute("SELECT * from funds where fund_nav<%s",[fundnav])
   rv = cur.fetchall()
   return jsonify(rv)
 
