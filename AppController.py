@@ -259,45 +259,42 @@ def signIn():
     else:
         return 'Request not valid!'
       #Get all match from history and funds table
-     @app.route('/funds/join', methods=['GET'])
-        def fundsalljoin():
-          cur =mysql.connection.cursor()
-          cur.execute("SELECT fund_name, fund_amc, fund_risk, fund_aum, fund_type, fund_nav, fund_mgr, fund_desc, img_src,fh1month, fh1year, fh_total FROM funds f ,fund_history h where f.fund_id = h.fund_id")
-          rv = cur.fetchall()
-          Results=[]
-          for entry in rv: 
-              Result={}
-              if entry=='fund_name':
-                Result['fundName']=rv[entry]
-              elif entry=='fund_amc':
-                Result['fundAmc']=rv[entry]
-              elif entry=='fund_risk':
-                Result['fundRisk']=rv[entry]
-              elif entry=='fund_aum':
-                Result['fundAum']=rv[entry]
-              elif entry=='fund_type':
-                Result['fundType']=rv[entry]
-              elif entry=='fund_nav':
-                Result['fundNav']=rv[entry]
-              elif entry=='fund_mgr':
-                Result['fundMgr']=rv[entry]
-              elif entry=='fund_desc':
-                Result['fundDesc']=rv[entry]
-              elif entry=='img_src':
-                Result['imgSrc']=rv[entry]
-              elif entry=='fh1month':
-                Result['fh1month']=rv[entry]
-              elif entry=='fh1year':
-                Result['fh1year']=rv[entry]
-              elif entry=='fh_total':
-                Result['fhTotal']=rv[entry]
-                Results.append(Result)
-        response=Results
-        resreturn=app.response_class(
-        response=json.dumps(response),
-        status=200,
-        mimetype='application/json'
-    )
+@app.route('/funds/join', methods=['GET'])
+def fundsalljoin():
+cur =mysql.connection.cursor()
+cur.execute("SELECT fund_name, fund_amc, fund_risk, fund_aum, fund_type, fund_nav, fund_mgr, fund_desc, img_src,fh1month, fh1year, fh_total FROM funds f ,fund_history h where f.fund_id = h.fund_id")
+rv = cur.fetchall()
+Results=[]
+for entry in rv: 
+  Result={}
+  if entry=='fund_name':
+    Result['fundName']=rv[entry]
+  elif entry=='fund_amc':
+    Result['fundAmc']=rv[entry]
+  elif entry=='fund_risk':
+    Result['fundRisk']=rv[entry]
+  elif entry=='fund_aum':
+    Result['fundAum']=rv[entry]
+  elif entry=='fund_type':
+    Result['fundType']=rv[entry]
+  elif entry=='fund_nav':
+    Result['fundNav']=rv[entry]
+  elif entry=='fund_mgr':
+    Result['fundMgr']=rv[entry]
+  elif entry=='fund_desc':
+    Result['fundDesc']=rv[entry]
+  elif entry=='img_src':
+    Result['imgSrc']=rv[entry]
+  elif entry=='fh1month':
+    Result['fh1month']=rv[entry]
+  elif entry=='fh1year':
+    Result['fh1year']=rv[entry]
+  elif entry=='fh_total':
+    Result['fhTotal']=rv[entry]
+    Results.append(Result)
+  response=Results
+  return jsonify(response)  
+        
 #Add API for find fundRisk Priority
 @app.route('/fundsRisk/Priority/<fundrisk>')
 def fundsRiskPriority(fundrisk):
