@@ -370,6 +370,21 @@ def FundTotal(id):
     rv=jsonify(rv)
     return rv
 
+@app.route('/funddelete', methods=['DELETE'])
+def funddelete():
+    cur =mysql.connection.cursor()
+    content_type = request.headers.get('Content-Type')
+    if (content_type == 'application/json'):
+        json = request.json
+        uf_id = json["ufId"]
+        userid = json["userid"]
+        cur.execute(
+    """DELETE from user_fund where uf_id=%s and user_id=%s""", (uf_id,userid))
+        mysql.connection.commit()
+        return jsonify(json)
+    else:
+        return 'Request not valid!'
+
 
 if __name__ == "__main__":
     app.run(host='0.0.0.0', port='8080')
