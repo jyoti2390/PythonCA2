@@ -10,6 +10,8 @@ class APPTest(unittest.TestCase):
     find_fund_URL = "{}/funds/HDFC".format(testURL)
     risk_URL = "{}/fundsRisk".format(testURL)
     fundbyid_URL = "{}/fundsById/1".format(testURL)
+    #/userfund/add
+    #http://52.176.47.148:8080/funddelete
     headers = {'Content-Type': 'application/json', 'authorization': 'Basic dXNlcjphZG1pbg=='}
 
     jsonsignup={
@@ -21,7 +23,6 @@ class APPTest(unittest.TestCase):
   "userAge": "81",
   "imgSrc": ""
 }
-
     jsonsignin={
   "userId": 0,
   "userName": "",
@@ -31,7 +32,6 @@ class APPTest(unittest.TestCase):
   "userAge": "",
   "imgSrc": ""
 }
-
     response_by_name = [
     {
         "fundId": 1,
@@ -46,12 +46,25 @@ class APPTest(unittest.TestCase):
         "imgSrc": "https://imageio.forbes.com/i-forbesimg/media/lists/companies/hdfc-bank_416x416.jpg?format=jpg&height=416&width=416&fit=bounds"
     }
 ]
-
     risk_list = [
     "low",
     "high",
     "medium"
 ]
+    useradddata= {
+    "userId": 14,
+    "ufId": 0,
+    "fundId": 2,
+    "ufType": "Equity",
+    "ufDate": "Mon Apr 18 2022",
+    "ufAmount": 45,
+    "fundName": "",
+    "fundAmc": "",
+    "totalFund": 0
+}
+    responseuserfundadd={"fundAmc":"","fundId":2,"fundName":"","totalFund":0,"ufAmount":45,"ufDate":"Mon Apr 18 2022","ufId":0,"ufType":"Equity","userId":14}
+
+    deletefund= {"ufId": "4", "userid": "14"}
 
     def test_1_fundsall(self):  #fetch and check quantity of json document for all funds and check for status
         r = requests.get(APPTest.all_fund_URL)
@@ -88,6 +101,16 @@ class APPTest(unittest.TestCase):
         r = requests.get(APPTest.fundbyid_URL)
         self.assertEqual(r.status_code, 200)
         self.assertEqual(len(r.json()), 1)
+
+    # def test_9_userfundadd(self):                  #add header
+    #     r = requests.get(APPTest.fundbyid_URL)
+    #     self.assertEqual(r.status_code, 200)
+    #     self.assertEqual(len(r.json()), 1)
+
+    # def test_10_userfunddelete(self):                  #add header
+    #     r = requests.get(APPTest.fundbyid_URL)
+    #     self.assertEqual(r.status_code, 200)
+    #     self.assertEqual(len(r.json()), 1)
 
 
 
