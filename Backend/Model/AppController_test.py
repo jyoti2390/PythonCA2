@@ -5,17 +5,28 @@ import requests
 class APPTest(unittest.TestCase):
     testURL = "http://52.176.47.148:8080"
     all_fund_URL = "{}/funds/all".format(testURL)
+    sign_upURL= "{}/user/add".format(testURL) 
     sign_inURL= "{}/signin".format(testURL) 
     find_fund_URL = "{}/funds/HDFC".format(testURL)
     risk_URL = "{}/fundsRisk".format(testURL)
+    fundbyid_URL = "{}/fundsById/1".format(testURL)
     headers = {'Content-Type': 'application/json', 'authorization': 'Basic dXNlcjphZG1pbg=='}
 
+    jsonsignup={
+  "userId": 0,
+  "userName": "test9",                              #imp change user name
+  "userEmail": "test9@xya.com",                     #imp change user email
+  "userPassword": "test9",                          #imp change pass
+  "userPhoneNumber": "108497858",
+  "userAge": "81",
+  "imgSrc": ""
+}
 
     jsonsignin={
   "userId": 0,
   "userName": "",
-  "userEmail": "vik",
-  "userPassword": "vik",
+  "userEmail": "test5@xya.com",
+  "userPassword": "test5",
   "userPhoneNumber": "",
   "userAge": "",
   "imgSrc": ""
@@ -42,33 +53,45 @@ class APPTest(unittest.TestCase):
     "medium"
 ]
 
-    def test_1_fundsall(self):
+    def test_1_fundsall(self):  #fetch and check quantity of json document for all funds and check for status
         r = requests.get(APPTest.all_fund_URL)
         self.assertEqual(r.status_code, 200)
         self.assertEqual(len(r.json()), 4)
 
-    def test_2_sign_WO_headers(self):
+    def test_2_sign_WO_auth(self):  #sign in wo auth
         r = requests.post(APPTest.sign_inURL, json=APPTest.jsonsignin)
         self.assertEqual(r.status_code, 401)
 
-    def test_3_sign_W_headers(self):
+    def test_3_sign_W_headers(self):   #sign in with auth
         r = requests.post(APPTest.sign_inURL, headers=self.headers,json=APPTest.jsonsignin)
         self.assertEqual(r.status_code, 200)
+    
+    def test_4_signup_WO_auth(self):   #sign up without auth
+        r = requests.post(APPTest.sign_upURL, json=APPTest.jsonsignup)
+        self.assertEqual(r.status_code, 401)
 
-    def test_4_filter_fundnamd(self):
-        r = requests.get(APPTest.find_fund_URL, headers=self.headers)
+    def test_5_signup_W_headers(self):   #sign up with auth
+        r = requests.post(APPTest.sign_upURL, headers=self.headers,json=APPTest.jsonsignup)
+        self.assertEqual(r.status_code, 200)
+
+    def test_6_filter_fundnamd(self):      #fund name filter
+        r = requests.get(APPTest.find_fund_URL)
         self.assertEqual(r.status_code, 200)
         self.assertEqual(r.json(), APPTest.response_by_name)
     
-    def test_5_fundrisk_list(self):
+    def test_7_fundrisk_list(self):         #fund risk return list
         r = requests.get(APPTest.risk_URL)
         self.assertEqual(r.status_code, 200)
         self.assertListEqual(r.json(), APPTest.risk_list)
+
+    def test_8_fundsById(self):                  #one id in req to one response 
+        r = requests.get(APPTest.fundbyid_URL)
+        self.assertEqual(r.status_code, 200)
+        self.assertEqual(len(r.json()), 1)
+
+
 
 if __name__ == '__main__':
      unittest.main()
 
      
-# /fundsById/<id>
-# /fundsHistoryById/<id>
-# /funds/<fundname>
