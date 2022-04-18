@@ -29,7 +29,7 @@ def authenticate(username, password):
       return False
     return False
 
-@app.route('/funds/all')
+@app.route('/funds/all', methods=['GET'])
 def ViewFunds():
     cur =mysql.connection.cursor()
     funds=cur.execute("SELECT * FROM `funds`;")
@@ -61,7 +61,7 @@ def FundAmc():
         Result=cur.fetchall()
         return jsonify(Result)
 
-@app.route('/fundsOrder')
+@app.route('/fundsOrder', methods=['GET'])
 def fundsOrder():
     cur =mysql.connection.cursor()
     cur.execute("SELECT * FROM funds order by fund_name;")
@@ -89,7 +89,7 @@ def fundsOrder():
 
     return resreturn
 
-@app.route('/fundsRisk')
+@app.route('/fundsRisk', methods=['GET'])
 def fundsRisk():
     cur =mysql.connection.cursor()
     cur.execute("SELECT distinct fund_risk FROM funds;")
@@ -106,7 +106,7 @@ def fundsRisk():
 
     return resreturn
 
-@app.route('/fundsOrderByAum')
+@app.route('/fundsOrderByAum', methods=['GET'])
 def fundsOrderByAum():
     cur =mysql.connection.cursor()
     cur.execute("SELECT * FROM funds order by fund_aum;")
@@ -136,7 +136,7 @@ def fundsOrderByAum():
 
 
 
-@app.route('/funds/<fundname>')
+@app.route('/funds/<fundname>', methods=['GET'])
 def fundsbyinput(fundname):
     cur =mysql.connection.cursor()
     cur.execute("SELECT * FROM funds where fund_amc=%s",[fundname])
@@ -164,7 +164,7 @@ def fundsbyinput(fundname):
 
     return resreturn
 
-@app.route('/search/<fundname>')
+@app.route('/search/<fundname>', methods=['GET'])
 def fundsbysearch(fundname):
     cur =mysql.connection.cursor()
     cur.execute("SELECT * FROM funds where fund_amc like '%%%s%%'" %(fundname))
@@ -191,6 +191,32 @@ def fundsbysearch(fundname):
     )
 
     return resreturn
+
+@app.route('/fundRisk', methods=['GET'])
+def fundRisk():
+    cur =mysql.connection.cursor()
+    cur.execute("SELECT distinct fund_risk FROM funds;")
+    rv = cur.fetchall()
+    Results=[]
+    for row in rv:
+      Results.append(row[0])
+    response=Results
+    resreturn=app.response_class(
+    response=json.dumps(response),
+    status=200,
+    mimetype='application/json'
+    )
+
+    return resreturn
+
+@app.route('/fundsById/<id>', methods=['GET'])
+def FundsByFundId(id):
+    cur =mysql.connection.cursor()
+    cur.execute("SELECT fund_name, fund_amc, fund_risk, fund_aum, fund_type, fund_nav, fund_mgr, fund_desc, img_src,fh1month, fh1year, fh_total, f.funds_id FROM funds f join fund_history h on f.funds_id = h.fund_id where f.funds_id=%s;",[int(id)])
+    rv = cur.fetchall()
+    rv=jsonify(rv)
+    return rv
+
 
 
 @app.route('/user/add', methods=['POST'])
@@ -328,7 +354,7 @@ status=200,
 mimetype='application/json'
 )
 
-@app.route('/fundsHistoryById/<id>')
+@app.route('/fundsHistoryById/<id>', methods=['GET'])
 def FundHistoryById(id):
     cur =mysql.connection.cursor()
     cur.execute("SELECT fund_name, fund_amc, uf_type, uf_amount, uf_date FROM funds f join user_fund u on f.fund_id = u.fund_id WHERE user_id=%s;",[int(id)])
@@ -336,13 +362,14 @@ def FundHistoryById(id):
     rv=jsonify(rv)
     return rv
 
-@app.route('/fundtotal/<id>')
+@app.route('/fundtotal/<id>', methods=['GET'])
 def FundTotal(id):
     cur =mysql.connection.cursor()
     cur.execute("SELECT sum(uf_amount) FROM funds f join user_fund u on f.fund_id = u.fund_id WHERE user_id=%s;",[int(id)])
     rv = cur.fetchall()
     rv=jsonify(rv)
     return rv
+
 
 if __name__ == "__main__":
     app.run(host='0.0.0.0', port='8080')
