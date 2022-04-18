@@ -298,7 +298,7 @@ def signIn():
         status=200,
         mimetype='application/json'
     )
-
+#Api for find fundRisk Priority
 @app.route('/fundsRisk/Priority/<fundrisk>')
 def fundsRiskPriority(fundrisk):
   cur =mysql.connection.cursor()
