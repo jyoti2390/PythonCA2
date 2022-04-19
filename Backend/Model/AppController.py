@@ -206,6 +206,7 @@ def fundsRisk(fundrisk):
   cur =mysql.connection.cursor()
   cur.execute("SELECT * from funds where fund_risk=%s",[fundrisk])
   rv = cur.fetchall()
+  Results=[]
   for entry in rv:      
     Result={}
     Result['fundId']=entry[0]
@@ -218,30 +219,80 @@ def fundsRisk(fundrisk):
     Result['fundMgr']=entry[7]
     Result['fundDesc']=entry[8]
     Result['imgSrc']=entry[9]
-  response=Result
+    Results.append(Result)
+  response=Results
   return jsonify(response)
 
-@app.route('/fundsAum/<fundAum>', methods=['GET'])
+
+@app.route('/fundsAum/<fundAum>',methods=['GET'])
 def fundsAum(fundAum):
   cur =mysql.connection.cursor()
+  Results=[]
   cur.execute("SELECT * from funds where fund_aum<%s",[fundAum])
   rv = cur.fetchall()
-  return jsonify(rv)
+  for entry in rv:      
+    Result={}
+    Result['fundId']=entry[0]
+    Result['fundName']=entry[1]
+    Result['fundAmc']=entry[2]
+    Result['fundRisk']=entry[3]
+    Result['fundType']=entry[4]
+    Result['fundAum']=entry[5]
+    Result['fundNav']=entry[6]
+    Result['fundMgr']=entry[7]
+    Result['fundDesc']=entry[8]
+    Result['imgSrc']=entry[9]
+    Results.append(Result)
+  response=Results
+  return jsonify(response)
 
-@app.route('/fundsReturn/<fundnav>', methods=['GET'])
+@app.route('/fundsReturn/<fundnav>',methods=['GET'])
 def fundsNav(fundnav):
   cur =mysql.connection.cursor()
-  cur.execute("SELECT * from funds where fund_nav<%s",[fundnav])
+  Results=[]
+  #cur.execute("SELECT * from funds where fund_nav<%s",[fundnav])
+  cur.execute("SELECT * from funds where fund_aum<2000000")
   rv = cur.fetchall()
-  return jsonify(rv)
+  for entry in rv:      
+    Result={}
+    Result['fundId']=entry[0]
+    Result['fundName']=entry[1]
+    Result['fundAmc']=entry[2]
+    Result['fundRisk']=entry[3]
+    Result['fundType']=entry[4]
+    Result['fundAum']=entry[5]
+    Result['fundNav']=entry[6]
+    Result['fundMgr']=entry[7]
+    Result['fundDesc']=entry[8]
+    Result['imgSrc']=entry[9]
+    Results.append(Result)
+  response=Results
+  return jsonify(response)
 
 #Get all match from history and funds table
 @app.route('/funds/join', methods=['GET'])
 def fundsalljoin():
   cur =mysql.connection.cursor()
+  Results[]
   cur.execute("SELECT fund_name, fund_amc, fund_risk, fund_aum, fund_type, fund_nav, fund_mgr, fund_desc, img_src,fh1month, fh1year, fh_total FROM funds f ,fund_history h where f.fund_id = h.fund_id")
   rv = cur.fetchall()
-  return jsonify(rv)
+  
+  for entry in rv:      
+    Result={}
+    Result['fundId']=entry[0]
+    Result['fundName']=entry[1]
+    Result['fundAmc']=entry[2]
+    Result['fundRisk']=entry[3]
+    Result['fundType']=entry[4]
+    Result['fundAum']=entry[5]
+    Result['fundNav']=entry[6]
+    Result['fundMgr']=entry[7]
+    Result['fundDesc']=entry[8]
+    Result['imgSrc']=entry[9]
+    Results.append(Result)
+  response=Results
+  return jsonify(response)
+
 
 
 @app.route('/user/add', methods=['POST'])
