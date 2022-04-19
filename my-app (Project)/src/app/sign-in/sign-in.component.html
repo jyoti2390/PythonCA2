@@ -1,0 +1,176 @@
+<div class="modal fade" id="modalLRForm" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+  <div class="modal-dialog cascading-modal" role="document">
+    <!--Content-->
+    <div class="modal-content">
+
+      <!--Modal cascading tabs-->
+      <div class="modal-c-tabs">
+
+        <!-- Nav tabs -->
+        <ul class="nav nav-tabs md-tabs tabs-2 light-blue darken-3" role="tablist">
+          <li class="nav-item">
+            <a class="nav-link active" data-toggle="tab" href="#panel7" role="tab" id="green"><i
+                class="fas fa-user mr-1"></i>
+              Sign In</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" data-toggle="tab" href="#panel8" role="tab" id="green"><i
+                class="fas fa-user-plus mr-1"></i>
+              Sign Up</a>
+          </li>
+        </ul>
+
+        <!-- Tab panels -->
+        <div class="tab-content">
+          <!--Panel 7-->
+          <div class="tab-pane fade in show active" id="panel7" role="tabpanel">
+
+            <!--Body-->
+            <div class="modal-body mb-1">
+              <form (ngSubmit)="signInSubmit(signInForm)" #signInForm="ngForm">
+                <div class="mb-3">
+                  <label for="userEmail" class="form-label" pattern=".com">User Email</label>
+                  <input type="text" class="form-control" id="userEmail" name="userEmail" [(ngModel)]="user.userEmail"
+                    #useremail="ngModel" placeholder="enter user email" required />
+                  <p class="small text-danger my-2" *ngIf="username.dirty && username.invalid">
+                    Email can't be empty !
+                  </p>
+                </div>
+
+                <div class="mb-3">
+                  <label for="password" class="form-label">Password</label>
+                  <input type="password" class="form-control" id="password" name="password"
+                    [(ngModel)]="user.userPassword" #password="ngModel" placeholder="enter password" required />
+                  <p class="small text-danger my-2" *ngIf="password.dirty && password.invalid">
+                    Password can't be empty !
+                  </p>
+                </div>
+
+                <button type="submit" class="btn" [disabled]="signInForm.pristine || signInForm.invalid" id="bgreen">
+                  Submit
+                </button>
+              </form>
+
+              <div class="alert alert-success d-flex align-items-center mt-2" role="alert" *ngIf="successFlag">
+                <i class="material-icons">check_circle</i>
+                <div class="ms-2">
+                  Login is successfull ! Click
+                  <a id="login" routerLink="" data-dismiss="modal">here</a> to go to home.
+                </div>
+              </div>
+
+              <div class="alert alert-danger d-flex align-items-center mt-2" role="alert" *ngIf="errorFlag">
+                <i class="material-icons"> warning </i>
+                <div class="ms-2">Login credentials are invalid</div>
+              </div>
+            </div>
+
+            <!--Footer-->
+            <div class="modal-footer">
+              <!-- <div class="options text-center text-md-right mt-1">
+                <p>Forgot <a href="#" class="blue-text" id="green">Password?</a></p>
+              </div> -->
+              <button type="button" class="btn btn-outline-info waves-effect ml-auto" routerLink="" data-dismiss="modal"
+                id="bgreen">Close</button>
+            </div>
+
+          </div>
+          <!--/.Panel 7-->
+
+          <!--Panel 8-->
+          <div class="tab-pane fade" id="panel8" role="tabpanel">
+
+            <!--Body-->
+            <div class="modal-body">
+              <form (ngSubmit)="signUpSubmit(signUpForm)" #signUpForm="ngForm">
+                <div class="mb-3">
+                  <label for="username" class="form-label">User Name</label>
+                  <input type="text" class="form-control" id="username" name="username" [(ngModel)]="user.userName"
+                    #username="ngModel" placeholder="enter user name" required />
+                  <p class="small text-danger my-2" *ngIf="username.dirty && username.invalid">
+                    User Name can't be empty !
+                  </p>
+                </div>
+
+                <div class="mb-3">
+                  <label for="name" class="form-label">User Email</label>
+                  <input type="text" class="form-control" id="name" name="name" [(ngModel)]="user.userEmail"
+                    #name="ngModel" placeholder="enter Email" required />
+                  <p class="small text-danger my-2" *ngIf="name.dirty && name.invalid">
+                    Email can't be empty !
+                  </p>
+                </div>
+
+                <div class="mb-3">
+                  <label for="userPhoneNumber" class="form-label">User Phone Number</label>
+                  <input type="text" class="form-control" id="userPhoneNumber" name="userPhoneNumber"
+                    [(ngModel)]="user.userPhoneNumber" #name="ngModel" placeholder="enter Phone Number" required />
+                  <p class="small text-danger my-2" *ngIf="name.dirty && name.invalid">
+                    Phone Number can't be empty !
+                  </p>
+                </div>
+
+                <div class="mb-3">
+                  <label for="userAge" class="form-label">User Age</label>
+                  <input type="text" class="form-control" id="userAge" name="userAge" [(ngModel)]="user.userAge"
+                    #name="ngModel" placeholder="enter Age" required />
+                  <p class="small text-danger my-2" *ngIf="name.dirty && name.invalid">
+                    Age can't be empty !
+                  </p>
+                </div>
+
+                <div class="mb-3">
+                  <label for="password" class="form-label">Password</label>
+                  <input type="password" class="form-control" id="password" name="password"
+                    [(ngModel)]="user.userPassword" #password="ngModel" placeholder="enter password" required />
+                  <p class="small text-danger my-2" *ngIf="password.dirty && password.invalid">
+                    Password can't be empty !
+                  </p>
+                </div>
+
+                <button type="submit" class="btn btn-primary" [disabled]="signUpForm.pristine || signUpForm.invalid"
+                  id="bgreen" >
+                  Submit
+                </button>
+              </form>
+
+              <div class="alert alert-success d-flex align-items-center mt-2" role="alert" *ngIf="successFlag">
+                <i class="material-icons">check_circle</i>
+                <div class="ms-2">
+                  New user created successfully ! Proceed to
+                  login.
+                </div>
+              </div>
+
+              <div class="alert alert-danger d-flex align-items-center mt-2" role="alert" *ngIf="errorFlag">
+                <i class="material-icons"> warning </i>
+                <div class="ms-2">
+                  There was an unexpected error. We couldn't complete your request.
+                </div>
+              </div>
+              <div class="alert alert-danger d-flex align-items-center mt-2" role="alert" *ngIf="emailError ">
+                <i class="material-icons"> warning </i>
+                <div class="ms-2">
+                  UserEmail already exists!!
+                </div>
+              </div>
+
+            </div>
+            <!--Footer-->
+            <div class="modal-footer">
+              <button type="button" class="btn btn-outline-info waves-effect ml-auto" data-dismiss="modal" routerLink=""
+                id="bgreen">Close</button>
+            </div>
+          </div>
+          <!--/.Panel 8-->
+
+        </div>
+
+      </div>
+    </div>
+    <!--/.Content-->
+  </div>
+</div>
+<!-- <div *ngIf="isHome() else elseBlock"><app-home></app-home></div>
+<ng-template #elseBlock> <app-hfund></app-hfund> </ng-template> -->
+<app-home></app-home>

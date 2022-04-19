@@ -1,0 +1,41 @@
+<nav class="navbar navbar-expand-lg animate__animated animate__fadeIn" id="darkgreen">
+  <div class="container-fluid">
+    <a class="navbar-brand" routerLink="">
+      <h4 id="cyan"><b>OneTap</b></h4> <b id="white"> Mutual Funds</b>
+    </a>
+    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent"
+      aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    <div style="margin-right: 170px;">
+      <form class="form-inline" (ngSubmit)="searchFund(fund.fundName)">
+        <input class="form-control mr-sm-6 " style="margin-left: 200px; width: 400px;" type="search" placeholder="Search"
+          aria-label="Search" name="search" [(ngModel)]="fundName" ngDefaultControl #search="ngModel">
+          <button class="btn btn-outline-success btn-rounded"  (click)="searchFund(fundName)"
+          style="margin-left: 5px; " id="cyan">Search</button>
+        </form>
+      
+    </div>
+    
+
+  </div>
+  <div class="collapse navbar-collapse" id="navbarSupportedContent" >
+    <button class="btn btn-outline-success btn-rounded" style="float: right;"
+      routerLink="/calculator" id="cyan">Calculator</button>
+    <div class="dropdown">
+      <button ngbDropdown class="btn btn-outline-success btn-rounded ml-1" type="button" id="dropdownMenuButton"
+        data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" id="cyan" *ngIf="!navauth()" style="width: 150px;">
+        {{auth.currentUser.userName}}            
+      </button>
+      <div ngbDropdownMenu class="shadow dropdown-menu" style="z-index:100;" aria-labelledby="dropdownMenuButton" *ngIf="!navauth()">
+        <a ngbDropDownToggle class="dropdown-item" href="#" routerLink="/myprofile">My Profile</a>
+        <a ngbDropDownToggle class="dropdown-item" href="#" routerLink="/myinvestment">My Investment</a>
+        <a ngbDropDownToggle class="dropdown-item" href="#" routerLink="" (click)="loggedOut()">Log Out</a>
+      </div>
+    </div>
+    <img [src]="auth.currentUser.imgSrc" style="width:40px; border-radius:20px; margin-left: 2px;" alt="">
+    <button class="btn btn-outline-success btn-rounded" data-toggle="modal" data-target="#modalLRForm"
+      routerLink="/signin" id="cyan" *ngIf="navauth()" style="float: right;">LogIn</button>
+  </div>
+
+</nav>

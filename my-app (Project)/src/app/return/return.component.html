@@ -1,0 +1,25 @@
+<div class="container mt-4">
+    <p class="display-4 text-center">Funds</p>
+    <hr />
+    <div>
+    </div>
+</div>
+<div class="container">
+    <table class="table table-hover table-dark">
+        <thead>
+            <tr>
+                <th scope="col">Fund Name</th>
+                <th scope="col">1 Year</th>
+                <th scope="col">3 Year</th>
+                <th scope="col">5 Year</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr *ngFor="let history of fundService.fundHistory">
+                <td *ngFor="let h of history">{{h}}</td>
+            </tr>
+        </tbody>
+    </table>
+</div>
+
+<app-footer></app-footer>
