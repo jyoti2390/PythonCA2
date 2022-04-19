@@ -228,7 +228,9 @@ def fundsRisk(fundrisk):
 def fundsAum(fundAum):
   cur =mysql.connection.cursor()
   Results=[]
-  cur.execute("SELECT * from funds where fund_aum<%s",[fundAum])
+  #cur.execute("SELECT * from funds where fund_aum<%s",[fundAum])
+  cur.execute("SELECT * from funds where fund_aum<2000000")
+
   rv = cur.fetchall()
   for entry in rv:      
     Result={}
@@ -250,8 +252,7 @@ def fundsAum(fundAum):
 def fundsNav(fundnav):
   cur =mysql.connection.cursor()
   Results=[]
-  #cur.execute("SELECT * from funds where fund_nav<%s",[fundnav])
-  cur.execute("SELECT * from funds where fund_aum<2000000")
+  cur.execute("SELECT * from funds where fund_nav<%s",[fundnav])
   rv = cur.fetchall()
   for entry in rv:      
     Result={}
@@ -273,7 +274,7 @@ def fundsNav(fundnav):
 @app.route('/funds/join', methods=['GET'])
 def fundsalljoin():
   cur =mysql.connection.cursor()
-  Results[]
+  Results=[]
   cur.execute("SELECT fund_name, fund_amc, fund_risk, fund_aum, fund_type, fund_nav, fund_mgr, fund_desc, img_src,fh1month, fh1year, fh_total FROM funds f ,fund_history h where f.fund_id = h.fund_id")
   rv = cur.fetchall()
   
