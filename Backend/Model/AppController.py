@@ -217,6 +217,47 @@ def FundsByFundId(id):
     rv=jsonify(rv)
     return rv
 
+@app.route('/fundsRisk/Priority/<fundrisk>')
+def fundsRiskPriority(fundrisk):
+  cur =mysql.connection.cursor()
+  cur.execute("SELECT * from funds where fund_risk=%s",[fundrisk])
+  rv = cur.fetchall()
+  for entry in rv:      
+    Result={}
+    Result['fundId']=entry[0]
+    Result['fundName']=entry[1]
+    Result['fundAmc']=entry[2]
+    Result['fundRisk']=entry[3]
+    Result['fundType']=entry[4]
+    Result['fundAum']=entry[5]
+    Result['fundNav']=entry[6]
+    Result['fundMgr']=entry[7]
+    Result['fundDesc']=entry[8]
+    Result['imgSrc']=entry[9]
+  response=Result
+  return jsonify(response)
+
+@app.route('/fundsAum/<fundAum>')
+def fundsAum(fundAum):
+  cur =mysql.connection.cursor()
+  cur.execute("SELECT * from funds where fund_aum<%s",[fundAum])
+  rv = cur.fetchall()
+  return jsonify(rv)
+
+@app.route('/fundsReturn/<fundnav>')
+def fundsNav(fundnav):
+  cur =mysql.connection.cursor()
+  cur.execute("SELECT * from funds where fund_nav<%s",[fundnav])
+  rv = cur.fetchall()
+  return jsonify(rv)
+
+#Get all match from history and funds table
+@app.route('/funds/join', methods=['GET'])
+def fundsalljoin():
+  cur =mysql.connection.cursor()
+  cur.execute("SELECT fund_name, fund_amc, fund_risk, fund_aum, fund_type, fund_nav, fund_mgr, fund_desc, img_src,fh1month, fh1year, fh_total FROM funds f ,fund_history h where f.fund_id = h.fund_id")
+  rv = cur.fetchall()
+  return jsonify(rv)
 
 
 @app.route('/user/add', methods=['POST'])
@@ -315,46 +356,7 @@ def userFundAdd():
 
 
 
-#Get all match from history and funds table
-@app.route('/funds/join', methods=['GET'])
-def fundsalljoin():
-    cur =mysql.connection.cursor()
-    cur.execute("SELECT fund_name, fund_amc, fund_risk, fund_aum, fund_type, fund_nav, fund_mgr, fund_desc, img_src,fh1month, fh1year, fh_total FROM funds f ,fund_history h where f.fund_id = h.fund_id")
-    rv = cur.fetchall()
-    Results=[]
-    for entry in rv: 
-        Result={}
-        if entry=='fund_name':
-        Result['fundName']=rv[entry]
-        elif entry=='fund_amc':
-        Result['fundAmc']=rv[entry]
-        elif entry=='fund_risk':
-        Result['fundRisk']=rv[entry]
-        elif entry=='fund_aum':
-        Result['fundAum']=rv[entry]
-        elif entry=='fund_type':
-        Result['fundType']=rv[entry]
-        elif entry=='fund_nav':
-        Result['fundNav']=rv[entry]
-        elif entry=='fund_mgr':
-        Result['fundMgr']=rv[entry]
-        elif entry=='fund_desc':
-        Result['fundDesc']=rv[entry]
-        elif entry=='img_src':
-        Result['imgSrc']=rv[entry]
-        elif entry=='fh1month':
-        Result['fh1month']=rv[entry]
-        elif entry=='fh1year':
-        Result['fh1year']=rv[entry]
-        elif entry=='fh_total':
-        Result['fhTotal']=rv[entry]
-        Results.append(Result)
-response=Results
-resreturn=app.response_class(
-response=json.dumps(response),
-status=200,
-mimetype='application/json'
-)
+
 
 @app.route('/fundsHistoryById/<id>', methods=['GET'])
 def FundHistoryById(id):
