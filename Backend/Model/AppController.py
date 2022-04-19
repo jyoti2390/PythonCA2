@@ -192,22 +192,6 @@ def fundsbysearch(fundname):
 
     return resreturn
 
-@app.route('/fundRisk', methods=['GET'])
-def fundRisk():
-    cur =mysql.connection.cursor()
-    cur.execute("SELECT distinct fund_risk FROM funds;")
-    rv = cur.fetchall()
-    Results=[]
-    for row in rv:
-      Results.append(row[0])
-    response=Results
-    resreturn=app.response_class(
-    response=json.dumps(response),
-    status=200,
-    mimetype='application/json'
-    )
-
-    return resreturn
 
 @app.route('/fundsById/<id>', methods=['GET'])
 def FundsByFundId(id):
