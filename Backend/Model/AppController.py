@@ -89,7 +89,7 @@ def fundsOrder():
 
     return resreturn
 
-@app.route('/fundsRisk', methods=['GET'])
+@app.route('/fundRisk', methods=['GET'])
 def fundsRisk():
     cur =mysql.connection.cursor()
     cur.execute("SELECT distinct fund_risk FROM funds;")
