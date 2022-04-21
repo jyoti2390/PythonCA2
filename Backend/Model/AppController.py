@@ -1,7 +1,6 @@
 from distutils.log import debug
 from flask_cors import CORS
 import MySQLdb
-# import Funds
 from flask import Flask, jsonify
 from flask_mysqldb import MySQL
 import json
@@ -12,6 +11,7 @@ from flask_httpauth import HTTPBasicAuth
 app = Flask(__name__)
 cors = CORS(app, resources={r"/*": {"origins": "*"}})
 
+#MySQL connection
 app.config['MYSQL_HOST'] = 'localhost'
 app.config['MYSQL_USER'] = 'root'
 app.config['MYSQL_PASSWORD'] = '' 
@@ -20,6 +20,8 @@ app.config['MYSQL_DB'] = 'wealthmanagement'
 mysql = MySQL(app)
 secure = HTTPBasicAuth()
 
+
+#implementation of HTTPBasicAuth
 @secure.verify_password
 def authenticate(username, password):
     if username and password:
@@ -29,6 +31,7 @@ def authenticate(username, password):
       return False
     return False
 
+#api1 - Get all result and display on the funds Page
 @app.route('/funds/all', methods=['GET'])
 def ViewFunds():
     cur =mysql.connection.cursor()
@@ -52,8 +55,8 @@ def ViewFunds():
             res.append(cur)
         return jsonify(res)
 
-
-@app.route('/fundAmc')
+#api2 - get distinct amc names to display on filter
+@app.route('/fundAmc', methods=['GET'])
 def FundAmc():
     cur =mysql.connection.cursor()
     funds=cur.execute("SELECT distinct fund_amc FROM funds;")
@@ -61,6 +64,7 @@ def FundAmc():
         Result=cur.fetchall()
         return jsonify(Result)
 
+#api3 - Get, order fund names alphabetically and deiplay it on funds page.
 @app.route('/fundsOrder', methods=['GET'])
 def fundsOrder():
     cur =mysql.connection.cursor()
@@ -86,9 +90,9 @@ def fundsOrder():
     status=200,
     mimetype='application/json'
     )
-
     return resreturn
 
+#get distinct fund risk and display on filter 
 @app.route('/fundRisk', methods=['GET'])
 def fundRisk():
     cur =mysql.connection.cursor()
@@ -103,9 +107,9 @@ def fundRisk():
     status=200,
     mimetype='application/json'
     )
-
     return resreturn
 
+#order fund by aum
 @app.route('/fundsOrderByAum', methods=['GET'])
 def fundsOrderByAum():
     cur =mysql.connection.cursor()
@@ -131,11 +135,10 @@ def fundsOrderByAum():
     status=200,
     mimetype='application/json'
     )
-
     return resreturn
 
 
-
+#get funds by their name. used in filter
 @app.route('/funds/<fundname>', methods=['GET'])
 def fundsbyinput(fundname):
     cur =mysql.connection.cursor()
@@ -161,9 +164,9 @@ def fundsbyinput(fundname):
     status=200,
     mimetype='application/json'
     )
-
     return resreturn
 
+#Search functionality, get result for search
 @app.route('/search/<fundname>', methods=['GET'])
 def fundsbysearch(fundname):
     cur =mysql.connection.cursor()
@@ -189,10 +192,10 @@ def fundsbysearch(fundname):
     status=200,
     mimetype='application/json'
     )
-
     return resreturn
 
 
+#get fund by the fund id
 @app.route('/fundsById/<id>', methods=['GET'])
 def FundsByFundId(id):
     cur =mysql.connection.cursor()
@@ -201,6 +204,7 @@ def FundsByFundId(id):
     rv=jsonify(rv)
     return rv
 
+#get fund by risk. used in filter
 @app.route('/fundsRisk/<fundrisk>', methods=['GET'])
 def fundsRisk(fundrisk):
   cur =mysql.connection.cursor()
@@ -223,14 +227,13 @@ def fundsRisk(fundrisk):
   response=Results
   return jsonify(response)
 
-
+#get fund by aum. used in filter
 @app.route('/fundsAum/<fundAum>',methods=['GET'])
 def fundsAum(fundAum):
   cur =mysql.connection.cursor()
   Results=[]
   #cur.execute("SELECT * from funds where fund_aum<%s",[fundAum])
   cur.execute("SELECT * from funds where fund_aum<2000000")
-
   rv = cur.fetchall()
   for entry in rv:      
     Result={}
@@ -248,6 +251,7 @@ def fundsAum(fundAum):
   response=Results
   return jsonify(response)
 
+#get funds by their return. used in filter
 @app.route('/fundsReturn/<fundnav>',methods=['GET'])
 def fundsNav(fundnav):
   cur =mysql.connection.cursor()
@@ -270,14 +274,13 @@ def fundsNav(fundnav):
   response=Results
   return jsonify(response)
 
-#Get all match from history and funds table
+#data fetched for showing fund details with thie returns
 @app.route('/funds/join', methods=['GET'])
 def fundsalljoin():
   cur =mysql.connection.cursor()
   Results=[]
   cur.execute("SELECT fund_name, fund_amc, fund_risk, fund_aum, fund_type, fund_nav, fund_mgr, fund_desc, img_src,fh1month, fh1year, fh_total FROM funds f ,fund_history h where f.fund_id = h.fund_id")
   rv = cur.fetchall()
-  
   for entry in rv:      
     Result={}
     Result['fundId']=entry[0]
@@ -295,9 +298,9 @@ def fundsalljoin():
   return jsonify(response)
 
 
-
-@app.route('/user/add', methods=['POST'])
-@secure.login_required
+#api to add user
+@app.route('/user/add', methods=['POST'])           #method post
+@secure.login_required                              #simpleauth  param
 def newusr():
     cur =mysql.connection.cursor()
     content_type = request.headers.get('Content-Type')
@@ -336,8 +339,9 @@ def newusr():
     else:
         return 'Request not valid!'
 
-@app.route('/signin', methods=['POST'])
-@secure.login_required
+ #api to sign in existing user
+@app.route('/signin', methods=['POST'])      #method post
+@secure.login_required                      #simple auth param
 def signIn():
     cur =mysql.connection.cursor()
     content_type = request.headers.get('Content-Type')
@@ -361,8 +365,9 @@ def signIn():
     else:
         return 'Request not valid!'
 
-@app.route('/userfund/add', methods=['POST'])
-@secure.login_required
+#add user fund 
+@app.route('/userfund/add', methods=['POST'])  #post method
+@secure.login_required                         #simple auth param
 def userFundAdd():
     cur =mysql.connection.cursor()
     content_type = request.headers.get('Content-Type')
@@ -390,10 +395,7 @@ def userFundAdd():
     else:
         return 'Request not valid!'
 
-
-
-
-
+#get funds by user id. displays the user fund
 @app.route('/fundsHistoryById/<id>', methods=['GET'])
 def FundHistoryById(id):
     cur =mysql.connection.cursor()
@@ -402,6 +404,7 @@ def FundHistoryById(id):
     rv=jsonify(rv)
     return rv
 
+#shows total fund that a user purchased
 @app.route('/fundtotal/<id>', methods=['GET'])
 def FundTotal(id):
     cur =mysql.connection.cursor()
@@ -410,8 +413,9 @@ def FundTotal(id):
     rv=jsonify(rv)
     return rv
 
-@app.route('/funddelete', methods=['DELETE'])
-@secure.login_required
+#delete the user funds
+@app.route('/funddelete', methods=['DELETE'])   #method delete
+@secure.login_required                          #basicauth
 def funddelete():
     cur =mysql.connection.cursor()
     content_type = request.headers.get('Content-Type')
