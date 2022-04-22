@@ -38,7 +38,7 @@ CREATE TABLE `fund_history` (
 
 LOCK TABLES `fund_history` WRITE;
 /*!40000 ALTER TABLE `fund_history` DISABLE KEYS */;
-INSERT INTO `fund_history` VALUES (1,5.35,26.23,9.01,1),(2,45.1,10.29,19.01,2),(3,55.11,11.29,30.01,3),(4,21.11,5.29,2.1,4);
+INSERT INTO `fund_history` VALUES (1,5.35,26.23,10.10,1),(2,45.1,10.29,29.00,2),(3,55.11,11.29,39.01,3),(4,21.11,5.29,42.1,4);
 /*!40000 ALTER TABLE `fund_history` ENABLE KEYS */;
 UNLOCK TABLES;
 
