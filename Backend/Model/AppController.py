@@ -228,32 +228,44 @@ def fundsRisk(fundrisk):
   return jsonify(response)
 
 #get fund by aum. used in filter
-@app.route('/fundsAum/<fundAum>',methods=['GET'])
-def fundsAum(fundAum):
-  cur =mysql.connection.cursor()
-  Results=[]
+@app.route('/fundsAum/<fundAums>',methods=['GET'])
+def fundsAum(fundAums):
+    fundAums=int(fundAums)
+    cur =mysql.connection.cursor()
   #cur.execute("SELECT * from funds where fund_aum<%s",[fundAum])
-  cur.execute("SELECT * from funds where fund_aum<2000000")
-  rv = cur.fetchall()
-  for entry in rv:      
-    Result={}
-    Result['fundId']=entry[0]
-    Result['fundName']=entry[1]
-    Result['fundAmc']=entry[2]
-    Result['fundRisk']=entry[3]
-    Result['fundType']=entry[4]
-    Result['fundAum']=entry[5]
-    Result['fundNav']=entry[6]
-    Result['fundMgr']=entry[7]
-    Result['fundDesc']=entry[8]
-    Result['imgSrc']=entry[9]
-    Results.append(Result)
-  response=Results
-  return jsonify(response)
+    if fundAums == 10: 
+        # print(fundAums)
+        cur.execute("SELECT * from funds where fund_aum<100000000")
+        rv = cur.fetchall()  
+    elif fundAums == 20:
+        
+        cur.execute("SELECT * from funds where fund_aum<200000000")
+        rv = cur.fetchall()
+    elif fundAums == 30:
+        
+        cur.execute("SELECT * from funds where fund_aum<300000000")
+        rv = cur.fetchall()
+    Results=[]
+    for entry in rv:
+              
+        Result={}
+        Result['fundId']=entry[0]
+        Result['fundName']=entry[1]
+        Result['fundAmc']=entry[2]
+        Result['fundRisk']=entry[3]
+        Result['fundType']=entry[4]
+        Result['fundAum']=entry[5]
+        Result['fundNav']=entry[6]
+        Result['fundMgr']=entry[7]
+        Result['fundDesc']=entry[8]
+        Result['imgSrc']=entry[9]
+        Results.append(Result)
+    response=Results
+    return jsonify(response)
 
 #get funds by their return. used in filter
-@app.route('/fundsReturn/<fundnav>',methods=['GET'])
-def fundsNav(fundnav):
+@app.route('/fundsReturn/<fhtotal>',methods=['GET'])
+def fundsNav(fhtotal):
   cur =mysql.connection.cursor()
   Results=[]
   #cur.execute("SELECT * from funds where fund_nav<%s",[fundnav])
