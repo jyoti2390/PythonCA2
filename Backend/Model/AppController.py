@@ -256,7 +256,8 @@ def fundsAum(fundAum):
 def fundsNav(fundnav):
   cur =mysql.connection.cursor()
   Results=[]
-  cur.execute("SELECT * from funds where fund_nav<%s",[fundnav])
+  #cur.execute("SELECT * from funds where fund_nav<%s",[fundnav])
+  cur.execute("SELECT f.funds_id,fund_name, fund_amc, fund_risk, fund_type,fund_aum,fund_nav, fund_mgr, fund_desc, img_src,fh1month, fh1year, fh_total FROM funds f ,fund_history h where f.funds_id = h.fund_id and fh_total<%s",[fhtotal])
   rv = cur.fetchall()
   for entry in rv:      
     Result={}
